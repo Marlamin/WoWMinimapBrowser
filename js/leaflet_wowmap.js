@@ -198,8 +198,6 @@
 			urlSet = true;
 		}
 
-		console.log(latlng);
-
 		RenderMap( latlng, zoom, true, urlSet);
 	}
 
