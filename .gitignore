@@ -1,0 +1,8 @@
+*.json
+css/leaflet_old.css
+js/leaflet-src_old.js
+*.csv
+js/leaflet_old.js
+js/Control.MiniMap.minold.js
+inc/config.php
+sftp-config.json

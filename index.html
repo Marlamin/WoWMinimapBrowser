@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>WoW Minimap Browser</title>
+	<link rel="icon" type="image/png" href="/favicon.png">
+	<link href="/css/leaflet.css?v=3" rel="stylesheet" type="text/css">
+	<link href="/css/style.css?v=19" rel="stylesheet" type="text/css">
+	<meta name="theme-color" content="#64B5F6">
+	<!--
+	## TODO (sorted by planned time, will do stuff on top first and then move to the bottom :) ).
+		- Implement phase overlays
+		- Optgroups with popular maps on top
+		- Map history (http://marlamin.com/minimaps/?history=1)
+		- Filters (by added in expansion, filter by alpha, beta, test or live)
+		- Offset fixes
+			- Make it so when you change bounds map adjusts for offset differences between versions
+		- More things I haven't thought of
+	-->
+</head>
+<body>
+	<button id="js-sidebar-button" class="hamburger">
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+	</button>
+
+	<div id="js-sidebar" class="overlay sidebar">
+		<h2>Minimap Browser</h2>
+
+		<h3>Map Options</h3>
+
+		<div>
+			<select id="js-map-select" disabled></select>
+		</div>
+
+		<div>
+			<!-- spaceless to prevent bugs when using percentages without float:left -->
+			<button id="js-version-prev" class="version-arrow" disabled>&larr;</button><select id="js-version-select" disabled></select><button id="js-version-next" class="version-arrow" disabled>&rarr;</button>
+		</div>
+		<div style='font-size: 12px; margin-top: 5px'><label for='js-techbox'>Enable technical details?</label> <input type='checkbox' id='js-techbox' ></div>
+		<div style='font-size: 12px; margin-top: 5px'>Alpha. Any major/breaking issues? <br><a href='mailto:marlamin@marlamin.com'>marlamin@marlamin.com</a></div>
+	</div>
+
+	<div id="js-techdetails" class="techdetails overlay closed">
+		<b>Details for last click:</b><br>
+		Coord: <span id="clickedCoord">No click. :(</span><br>
+		Tile: <span id="clickedADT">No click. :(</span><br>
+		Name: <span id="clickedName">No click. :(</span>
+	</div>
+
+	<button id="js-layers-button" class="layerbutton">
+		<i class="fa fa-map-marker fa-2x"></i>
+	</button>
+
+	<div id="js-layers" class="overlay layers">
+		<h2>Map layers</h2>
+		<div style='font-size: 12px; margin-top: 5px'>Currently working on this, still buggy! <br>Big data sets might take a few seconds to load. 
+		<br>
+		More layers coming in the future.</div>
+		<div style='font-size: 12px; margin-top: 5px'><input type='checkbox' name='flightpoints' id='js-flightlayer'> <label for="js-flightlayer">Flight masters (only some maps)</label></div>
+	</div>
+
+	<div id="js-map" class="map-canvas">&nbsp;</div>
+	<script type="text/javascript" src="/js/leaflet-src.js?v=3"></script>
+	<script type="text/javascript" src="/js/leaflet_wowmap.js?v=215"></script>
+	<script type="text/javascript" src="/js/Control.MiniMap.js"></script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-8420950-3', 'auto');
+	  ga('send', 'pageview');
+	</script>
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha256-3dkvEK0WLHRJ7/Csr0BZjAWxERc5WH7bdeUya2aXxdU= sha512-+L4yy6FRcDGbXJ9mPG8MT/3UCDzwR9gPeyFNMCtInsol++5m3bk2bXWKdZjvybmohrAsn3Ua5x8gfLnbE1YkOg==" crossorigin="anonymous">
+</body>
+</html>
