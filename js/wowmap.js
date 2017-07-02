@@ -100,8 +100,8 @@
 	function InitializeMapOptions( maps )
 	{
 		var url = window.location.pathname.split( '/' ),
-			option,
-			fragment = document.createDocumentFragment();
+		option,
+		fragment = document.createDocumentFragment();
 
 		maps.forEach( function( map, i )
 		{
@@ -146,7 +146,7 @@
 			point = new google.maps.Point(
 				Versions[ Current.Map ][ Current.Version ].config.resx / 256,
 				Versions[ Current.Map ][ Current.Version ].config.resy / 256
-			);
+				);
 		}
 
 		RenderMap( point, zoom, true );
@@ -155,8 +155,8 @@
 	function UpdateMapVersions()
 	{
 		var element,
-			sortable = [],
-			fragment = document.createDocumentFragment();
+		sortable = [],
+		fragment = document.createDocumentFragment();
 
 		// Turn versions object into a list so that it can be sorted
 		Object.keys( Versions[ Current.Map ] ).forEach( function( versionId )
@@ -240,8 +240,8 @@
 				new google.maps.Point(
 					Versions[ Current.Map ][ Current.Version ].config.resx / 256,
 					Versions[ Current.Map ][ Current.Version ].config.resy / 256
-				), 0, true
-			);
+					), 0, true
+				);
 		} );
 
 		Elements.Versions.addEventListener( 'change', ChangeVersion );
@@ -402,8 +402,8 @@
 				projection.fromPointToLatLng( new google.maps.Point(
 					Versions[ Current.Map ][ Current.Version ].config.resx / 128,
 					Versions[ Current.Map ][ Current.Version ].config.resy / 128
-				) )
-			) );
+					) )
+				) );
 		}
 		else if( GoogleMap.getZoom() !== zoom )
 		{
@@ -423,14 +423,14 @@
 
 		//Center of map in px
 		console.log(new google.maps.Point(
-				Versions[ Current.Map ][ Current.Version ].config.resx / 256,
-				Versions[ Current.Map ][ Current.Version ].config.resy / 256
+			Versions[ Current.Map ][ Current.Version ].config.resx / 256,
+			Versions[ Current.Map ][ Current.Version ].config.resy / 256
 			));
 		markers.push(new google.maps.Marker({
 			position: projection.fromPointToLatLng( new google.maps.Point(
 				Versions[ Current.Map ][ Current.Version ].config.resx / 256,
 				Versions[ Current.Map ][ Current.Version ].config.resy / 256
-			) ),
+				) ),
 			map: GoogleMap,
 			title: 'Map center'
 		}));
@@ -513,7 +513,7 @@
 				)
 			}));
 		}
-*/
+		*/
 	}
 
 	function SynchronizeTitleAndURL( isMapChange, point )

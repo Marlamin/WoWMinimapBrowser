@@ -141,8 +141,8 @@
 	function InitializeMapOptions( maps )
 	{
 		var url = window.location.pathname.split( '/' ),
-			option,
-			fragment = document.createDocumentFragment();
+		option,
+		fragment = document.createDocumentFragment();
 
 		maps.forEach( function( map, i )
 		{
@@ -193,7 +193,7 @@
 			d('Falling back to center?');
 			latlng = new L.LatLng(
 				0,0
-			);
+				);
 		}else{
 			urlSet = true;
 		}
@@ -206,8 +206,8 @@
 	function UpdateMapVersions()
 	{
 		var element,
-			sortable = [],
-			fragment = document.createDocumentFragment();
+		sortable = [],
+		fragment = document.createDocumentFragment();
 
 		// Turn versions object into a list so that it can be sorted
 		Object.keys( Versions[ Current.Map ] ).forEach( function( versionId )
@@ -290,12 +290,12 @@
 
 			RenderMap(
 				LeafletMap.unproject(
-				[
+					[
 					Versions[ Current.Map ][ Current.Version ].config.resy / 2,
 					Versions[ Current.Map ][ Current.Version ].config.resx / 2
-				], LeafletMap.getMaxZoom())
+					], LeafletMap.getMaxZoom())
 				, 2, true, false
-			);
+				);
 
 			if(!Offsets[Versions[Current.Map][Current.Version].build]){
 				Elements.FlightLayer.disabled = true;
@@ -415,32 +415,32 @@
 		FlightPathLayer = new L.LayerGroup();
 
 		var allianceIcon = L.icon({
-            iconUrl: '/images/marker-icon-alliance.png',
-            iconAnchor:  [12, 41],
+			iconUrl: '/images/marker-icon-alliance.png',
+			iconAnchor:  [12, 41],
 			popupAnchor: [1, -34],
 			shadowSize:  [41, 41]
-        });
+		});
 
-        var hordeIcon = L.icon({
-            iconUrl: '/images/marker-icon-horde.png',
-            iconAnchor:  [12, 41],
+		var hordeIcon = L.icon({
+			iconUrl: '/images/marker-icon-horde.png',
+			iconAnchor:  [12, 41],
 			popupAnchor: [1, -34],
 			shadowSize:  [41, 41]
-        });
+		});
 
-        var neutralIcon = L.icon({
-            iconUrl: '/images/marker-icon-neutral.png',
-            iconAnchor:  [12, 41],
+		var neutralIcon = L.icon({
+			iconUrl: '/images/marker-icon-neutral.png',
+			iconAnchor:  [12, 41],
 			popupAnchor: [1, -34],
 			shadowSize:  [41, 41]
-        });
+		});
 
-        var unknownIcon = L.icon({
-            iconUrl: '/images/marker-icon-unknown.png',
-            iconAnchor:  [12, 41],
+		var unknownIcon = L.icon({
+			iconUrl: '/images/marker-icon-unknown.png',
+			iconAnchor:  [12, 41],
 			popupAnchor: [1, -34],
 			shadowSize:  [41, 41]
-        });
+		});
 
 		console.log(fpxhr.response);
 		if(!Offsets[Versions[Current.Map][Current.Version].build]){
@@ -461,14 +461,13 @@
 
 				FlightPathLayer.addLayer(new L.marker(WoWtoLatLng(fpxhr.response.points[id].x, fpxhr.response.points[id].y), {icon: icon}).bindPopup(fpxhr.response.points[id].name));
 				if(fpxhr.response.points[id].connected){ // If it has connected flight points
-					for(var j = 0; j < fpxhr.response.points[id].connected.length; j++){	
+					for(var j = 0; j < fpxhr.response.points[id].connected.length; j++){
 						var connectedID = fpxhr.response.points[id].connected[j];
 						if(fpxhr.response.points[connectedID]){ // If connected flight point exists, Blizzard actually references non-existant ones. :(
 							var fromlat = WoWtoLatLng(fpxhr.response.points[id].x, fpxhr.response.points[id].y);
 							var tolat = WoWtoLatLng(fpxhr.response.points[connectedID].x, fpxhr.response.points[connectedID].y);
 							FlightPathLayer.addLayer(new L.polyline([fromlat, tolat], {weight: 1, color: 'yellow'}));
 						}
-						
 					}
 				}
 			}
