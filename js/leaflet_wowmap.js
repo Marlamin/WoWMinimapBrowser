@@ -367,23 +367,31 @@
 
 			var point = LeafletMap.project(e.latlng);
 
-			if(!Offsets[Versions[Current.Map][Current.Version].build]){
-				document.getElementById("clickedADT").textContent = "Not supported on map.";
-				document.getElementById("clickedCoord").textContent = "Not supported on map.";
+			var offset = null;
+
+			if(!Offsets[Versions[Current.Map][Current.Version].build] || !(Current.InternalMap in Offsets[Versions[Current.Map][Current.Version].build])){
+				var offsapixhr = new XMLHttpRequest();
+				offsapixhr.responseType = 'json';
+				offsapixhr.onreadystatechange = function() {
+					if (offsapixhr.readyState === 4) {
+						if('x' in offsapixhr.response){
+							offset = offsapixhr.response;
+							ProcessOffsetResult(e, offset);
+						}else{
+							document.getElementById("clickedADT").textContent = "Not supported on map.";
+							document.getElementById("clickedCoord").textContent = "Not supported on map.";
+						}
+					}else{
+						document.getElementById("clickedADT").textContent = "Not supported on map.";
+						document.getElementById("clickedCoord").textContent = "Not supported on map.";
+					}
+				}
+
+				offsapixhr.open( 'GET', '/api.php?type=offset&build=' + Versions[Current.Map][Current.Version].build + '&map=' + Current.InternalMap, true );
+				offsapixhr.send();
 			}else{
-				var layerPoint = LeafletMap.project(e.latlng, LeafletMap.getMaxZoom()).floor();
-
-				var adt = PointToWoWTile(layerPoint);
-				var ingame = PointToWoW(layerPoint);
-
-				document.getElementById("clickedCoord").textContent =  Math.floor(ingame.x) + ' ' + Math.floor(ingame.y) + ' 200 ' + Current.InternalMapID;
-				document.getElementById("clickedADT").textContent = Current.InternalMap + '_' + adt.x + '_' + adt.y;
-
-				var mcnkIndex = WoWTileAndCoordToMCNK(adt, ingame);
-
-				anxhr.open( 'GET', '/api.php?type=areaname&id=' + Current.InternalMapID + '&adt=' + adt.x + '_' + adt.y + '&index=' + Math.floor(mcnkIndex), true );
-				anxhr.responseType = 'json';
-				anxhr.send();
+				offset = Offsets[Versions[Current.Map][Current.Version].build][Current.InternalMap];
+				ProcessOffsetResult(e, offset);
 			}
 		} );
 
@@ -391,6 +399,26 @@
 		Elements.Versions.disabled = false;
 	}
 
+	function ProcessOffsetResult(e, offset){
+		if(offset != null && 'x' in offset){
+			var layerPoint = LeafletMap.project(e.latlng, LeafletMap.getMaxZoom()).floor();
+
+			var adt = PointToWoWTile(layerPoint, offset);
+			var ingame = PointToWoW(layerPoint, offset);
+
+			document.getElementById("clickedCoord").textContent =  Math.floor(ingame.x) + ' ' + Math.floor(ingame.y) + ' 200 ' + Current.InternalMapID;
+			document.getElementById("clickedADT").textContent = Current.InternalMap + '_' + adt.x + '_' + adt.y;
+
+			var mcnkIndex = WoWTileAndCoordToMCNK(adt, ingame);
+
+			anxhr.open( 'GET', '/api.php?type=areaname&id=' + Current.InternalMapID + '&adt=' + adt.x + '_' + adt.y + '&index=' + Math.floor(mcnkIndex), true );
+			anxhr.responseType = 'json';
+			anxhr.send();
+		}else{
+			document.getElementById("clickedADT").textContent = "Not supported on map.";
+			document.getElementById("clickedCoord").textContent = "Not supported on map.";
+		}
+	}
 	function ProcessAreaResult()
 	{
 		if( anxhr.readyState !== 4 )
@@ -494,12 +522,10 @@
 	}
 
 	function LatLngToWoW( latlng ){
-		return PointToWoW(LeafletMap.project(latlng, LeafletMap.getMaxZoom()));
+		return PointToWoW(LeafletMap.project(latlng, LeafletMap.getMaxZoom()), Offsets[Versions[Current.Map][Current.Version].build][Current.InternalMap]);
 	}
 
-	function PointToWoW( point ){
-		var offset = Offsets[Versions[Current.Map][Current.Version].build][Current.InternalMap];
-
+	function PointToWoW( point, offset ){
 		var adtsToCenterX = ((point.y / 256) + offset.x) - 32;
 		var adtsToCenterY = ((point.x / 256) + offset.y) - 32;
 
@@ -509,9 +535,7 @@
 		return new L.Point(ingameX, ingameY);
 	}
 
-	function PointToWoWTile( point ){
-		var offset = Offsets[Versions[Current.Map][Current.Version].build][Current.InternalMap];
-
+	function PointToWoWTile( point, offset ){
 		var adtX = Math.floor((point.x / 256) + offset.y);
 		var adtY = Math.floor((point.y / 256) + offset.x);
 
