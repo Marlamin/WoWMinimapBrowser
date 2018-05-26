@@ -574,6 +574,8 @@
 
 		d( 'Loading map ' + name );
 
+		LeafletMap.options.maxZoom = Versions[ Current.Map ][ Current.Version ].config.maxzoom;
+
 		var mapbounds = new L.LatLngBounds(LeafletMap.unproject([1, Versions[ Current.Map ][ Current.Version ].config.resy - 1], LeafletMap.getMaxZoom()), LeafletMap.unproject([Versions[ Current.Map ][ Current.Version ].config.resx - 1, 1], LeafletMap.getMaxZoom()));
 
 		if(TileLayer){
