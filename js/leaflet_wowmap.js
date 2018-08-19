@@ -403,8 +403,9 @@
 		if(offset != null && 'x' in offset){
 			var layerPoint = LeafletMap.project(e.latlng, LeafletMap.getMaxZoom()).floor();
 
-			var adt = PointToWoWTile(layerPoint, offset);
-			var ingame = PointToWoW(layerPoint, offset);
+			var build = Versions[Current.Map][Current.Version].build;
+			var adt = PointToWoWTile(layerPoint, offset, build);
+			var ingame = PointToWoW(layerPoint, offset, build);
 
 			document.getElementById("clickedCoord").textContent =  Math.floor(ingame.x) + ' ' + Math.floor(ingame.y) + ' 200 ' + Current.InternalMapID;
 			document.getElementById("clickedADT").textContent = Current.InternalMap + '_' + adt.x + '_' + adt.y;
@@ -525,9 +526,14 @@
 		return PointToWoW(LeafletMap.project(latlng, LeafletMap.getMaxZoom()), Offsets[Versions[Current.Map][Current.Version].build][Current.InternalMap]);
 	}
 
-	function PointToWoW( point, offset ){
-		var adtsToCenterX = ((point.y / 256) + offset.x) - 32;
-		var adtsToCenterY = ((point.x / 256) + offset.y) - 32;
+	function PointToWoW( point, offset, build ){
+		var tileSize = 256;
+		if(build > 26707){
+			tileSize = 512;
+		}
+
+		var adtsToCenterX = ((point.y / tileSize) + offset.x) - 32;
+		var adtsToCenterY = ((point.x / tileSize) + offset.y) - 32;
 
 		var ingameX = -(adtsToCenterX * adtSize); // (╯°□°）╯︵ ┻━┻
 		var ingameY = -(adtsToCenterY * adtSize); // (╯°□°）╯︵ ┻━┻
@@ -535,9 +541,13 @@
 		return new L.Point(ingameX, ingameY);
 	}
 
-	function PointToWoWTile( point, offset ){
-		var adtX = Math.floor((point.x / 256) + offset.y);
-		var adtY = Math.floor((point.y / 256) + offset.x);
+	function PointToWoWTile( point, offset, build ){
+		var tileSize = 256;
+		if(build > 26707){
+			tileSize = 512;
+		}
+		var adtX = Math.floor((point.x / tileSize) + offset.y);
+		var adtY = Math.floor((point.y / tileSize) + offset.x);
 
 		return new L.Point(adtX, adtY);
 	}
