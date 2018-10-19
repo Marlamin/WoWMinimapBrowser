@@ -338,6 +338,10 @@
 			Elements.TechDetails.classList.toggle( 'closed' );
 		} );
 
+		if(Elements.TechBox.checked){
+			Elements.TechDetails.classList.toggle( 'closed' );
+		}
+
 		Elements.FlightLayer.addEventListener( 'click', function( )
 		{
 			if(Elements.FlightLayer.checked){
