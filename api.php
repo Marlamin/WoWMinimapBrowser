@@ -70,12 +70,23 @@ if($_GET['type'] == "areaname"){
 		die();
 	}
 
+	$root8 = substr($root, 0, 8);
+	$root8dec = hexdec($root8);
+
 	$map = strtolower(filter_var($_GET['map'], FILTER_SANITIZE_STRING));
 
 	$offset['y'] = 63;
 	$offset['x'] = 63;
 
-	$fq = $cascdb->query("SELECT wow_rootfiles.filename FROM wow_rootfiles_available_".substr($root, 0, 5)." build JOIN wow_rootfiles ON wow_rootfiles.id = build.filedataid WHERE wow_rootfiles.filename LIKE 'world/minimaps/".$mysqli->escape_string($map)."/map%' ORDER BY wow_rootfiles.filename ASC");
+	$q = $cascdb->query("SELECT id FROM wow_rootfiles_available_roots WHERE root8 = '".$root8dec."'");
+	if($q->num_rows == 0){
+		$q = $cascdb->query("INSERT INTO wow_rootfiles_available_roots (root8) VALUES ('".$root8dec."')");
+		$rootid = $mysqli->insert_id;
+	}else{
+		$rootid = $q->fetch_assoc()['id'];
+	}
+
+	$fq = $cascdb->query("SELECT wow_rootfiles.filename FROM wow_rootfiles_available build JOIN wow_rootfiles ON wow_rootfiles.id = build.filedataid WHERE build.root8id = ".$rootid." AND wow_rootfiles.filename LIKE 'world/minimaps/".$mysqli->escape_string($map)."/map%' ORDER BY wow_rootfiles.filename ASC");
 	if($fq->num_rows == 0){
 		echo json_encode(array("error" => "No results"));
 		die();
